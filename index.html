@@ -7,38 +7,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f1f6;
+            background-color: #f9f1f6; /* 전체 배경색 */
             color: #333;
             text-align: center;
-            width :100%;
-            max-width: 100%;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             height: 100vh; /* 화면 세로를 꽉 채우기 */
         }
-        .guestbook {
-            flex: 1; /* 화면 남은 공간을 차지 */
-            max-width: 650px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow: hidden; /* 내용이 넘치지 않게 */
-        }
+
         .welcome {
-            margin-bottom: 20px;
+            margin: 20px 0; /* 적당한 여백 추가 */
             font-size: 24px;
             line-height: 1.5;
             font-weight: bold;
             color: #ff6fa5;
         }
+
         .message-list {
-            flex: 1; /* 남는 공간 모두 차지 */
+            flex: 1; /* 화면 남은 공간을 차지 */
             overflow-y: auto; /* 세로 스크롤 가능 */
             text-align: right; /* 메시지 우측 정렬 */
             padding: 10px;
@@ -46,22 +34,25 @@
             flex-direction: column; /* 아래로 쌓이게 */
             gap: 10px; /* 메시지 간격 */
         }
+
         .message {
             display: inline-block;
             align-self: flex-end; /* 우측 정렬 */
-            background-color: #ffebf0;
+            background-color: #ffffff;
             color: #333;
             padding: 10px 15px;
             border-radius: 10px;
             word-wrap: break-word; /* 길면 줄바꿈 */
             max-width: 75%; /* 메시지 최대 너비 */
         }
+
         .chat-form {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 10px;
         }
+
         .chat-form input, .chat-form button {
             margin: 5px 0;
             padding: 10px;
@@ -70,30 +61,30 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
         .chat-form button {
             background-color: #ff6fa5;
             color: #fff;
             border: none;
             cursor: pointer;
         }
+
         .chat-form button:hover {
             background-color: #ff4f85;
         }
     </style>
 </head>
 <body>
-    <div class="guestbook">
-        <div class="welcome">
-            welcome to <br> 自由世界
-        </div>
-        <div class="message-list" id="messageList">
-            <!-- 메시지가 여기에 추가됩니다 -->
-        </div>
-        <form id="chatForm" class="chat-form">
-            <input type="text" id="message" placeholder="메시지를 입력하세요" required>
-            <button type="submit">전송</button>
-        </form>
+    <div class="welcome">
+        welcome to <br> 自由世界!
     </div>
+    <div class="message-list" id="messageList">
+        <!-- 메시지가 여기에 추가됩니다 -->
+    </div>
+    <form id="chatForm" class="chat-form">
+        <input type="text" id="message" placeholder="메시지를 입력하세요" required>
+        <button type="submit">전송</button>
+    </form>
     <script>
         // JavaScript로 채팅 기능 추가
         const chatForm = document.getElementById('chatForm');
