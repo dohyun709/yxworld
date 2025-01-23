@@ -7,52 +7,55 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f1f6; /* 전체 배경색 */
+            background-color: #f9f1f6;
             color: #333;
-            text-align: center;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* 화면 세로를 꽉 채우기 */
+            height: 100vh;
         }
-
+        .guestbook {
+            flex: 1;
+            margin: 0 auto;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow: hidden;
+        }
         .welcome {
-            margin: 20px 0; /* 적당한 여백 추가 */
+            margin-bottom: 20px;
             font-size: 24px;
-            line-height: 1.5;
             font-weight: bold;
             color: #ff6fa5;
         }
-
         .message-list {
-            flex: 1; /* 화면 남은 공간을 차지 */
-            overflow-y: auto; /* 세로 스크롤 가능 */
-            text-align: right; /* 메시지 우측 정렬 */
+            flex: 1;
+            overflow-y: auto;
+            text-align: right;
             padding: 10px;
             display: flex;
-            flex-direction: column; /* 아래로 쌓이게 */
-            gap: 10px; /* 메시지 간격 */
+            flex-direction: column;
+            gap: 10px;
         }
-
         .message {
             display: inline-block;
-            align-self: flex-end; /* 우측 정렬 */
-            background-color: #ffffff;
+            align-self: flex-end;
+            background-color: #ffffff; /* 흰색 메시지 */
             color: #333;
             padding: 10px 15px;
             border-radius: 10px;
-            word-wrap: break-word; /* 길면 줄바꿈 */
-            max-width: 75%; /* 메시지 최대 너비 */
+            word-wrap: break-word;
+            max-width: 75%;
+            border: 1px solid #ddd;
         }
-
         .chat-form {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 10px;
         }
-
         .chat-form input, .chat-form button {
             margin: 5px 0;
             padding: 10px;
@@ -61,57 +64,64 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
         .chat-form button {
             background-color: #ff6fa5;
             color: #fff;
             border: none;
             cursor: pointer;
         }
-
         .chat-form button:hover {
             background-color: #ff4f85;
+        }
+
+        /* 모바일 전용 디자인 */
+        @media screen and (max-width: 768px) {
+            .welcome {
+                font-size: 20px;
+            }
+            .message {
+                max-width: 90%; /* 메시지 너비를 더 늘림 */
+            }
+            .chat-form input, .chat-form button {
+                padding: 8px;
+                width: 95%; /* 입력창 너비 확장 */
+            }
+            .guestbook {
+                padding: 15px; /* 모바일에 맞춰 내부 여백 조정 */
+            }
         }
     </style>
 </head>
 <body>
-    <div class="welcome">
-        welcome to <br> 自由世界!
+    <div class="guestbook">
+        <div class="welcome">
+            welcome to <br> 自由世界
+        </div>
+        <div class="message-list" id="messageList">
+            <!-- 메시지가 여기에 추가됩니다 -->
+        </div>
+        <form id="chatForm" class="chat-form">
+            <input type="text" id="message" placeholder="메시지를 입력하세요" required>
+            <button type="submit">전송</button>
+        </form>
     </div>
-    <div class="message-list" id="messageList">
-        <!-- 메시지가 여기에 추가됩니다 -->
-    </div>
-    <form id="chatForm" class="chat-form">
-        <input type="text" id="message" placeholder="메시지를 입력하세요" required>
-        <button type="submit">전송</button>
-    </form>
     <script>
-        // JavaScript로 채팅 기능 추가
         const chatForm = document.getElementById('chatForm');
         const messageList = document.getElementById('messageList');
 
-        // 폼이 제출될 때 실행
         chatForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // 기본 폼 동작(새로고침) 막기
-            
-            // 입력된 메시지 가져오기
+            event.preventDefault();
             const messageInput = document.getElementById('message');
             const messageText = messageInput.value.trim();
 
             if (messageText !== '') {
-                // 메시지 요소 생성
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
                 messageElement.textContent = messageText;
 
-                // 메시지 리스트에 추가
                 messageList.appendChild(messageElement);
-
-                // 입력 필드 초기화
                 messageInput.value = '';
-                messageInput.focus(); // 다시 입력 필드로 포커스
-
-                // 스크롤을 아래로 자동 이동
+                messageInput.focus();
                 messageList.scrollTop = messageList.scrollHeight;
             }
         });
