@@ -7,52 +7,80 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f1f6; /* 전체 배경색 */
+            background-color: #f9f1f6;
             color: #333;
             text-align: center;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* 화면 세로를 꽉 채우기 */
+            height: 100vh;
         }
-
+        .guestbook {
+            flex: 1;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow: hidden;
+        }
         .welcome {
-            margin: 20px 0; /* 적당한 여백 추가 */
-            font-size: 24px;
+            margin-bottom: 20px;
             line-height: 1.5;
-            font-weight: bold;
-            color: #ff6fa5;
+            font-weight: normal;
         }
-
+        .welcome .part1 {
+            font-size: 24px;
+            color: #fda9c8;
+            font-family: "Danjo-Bold", sans-serif;
+        }
+        .welcome .part2 {
+            font-size: 32px;
+            color: #ff6fa5;
+            font-family: "GB18030 Bitmap", monospace;
+        }
         .message-list {
-            flex: 1; /* 화면 남은 공간을 차지 */
-            overflow-y: auto; /* 세로 스크롤 가능 */
-            text-align: right; /* 메시지 우측 정렬 */
+            flex: 1;
+            overflow-y: auto;
+            text-align: left; /* 기본 좌측 정렬 */
             padding: 10px;
             display: flex;
-            flex-direction: column; /* 아래로 쌓이게 */
-            gap: 10px; /* 메시지 간격 */
+            flex-direction: column;
+            gap: 10px;
         }
-
         .message {
             display: inline-block;
-            align-self: flex-end; /* 우측 정렬 */
-            background-color: #ffffff;
+            background-color: #ffebf0;
             color: #333;
             padding: 10px 15px;
             border-radius: 10px;
-            word-wrap: break-word; /* 길면 줄바꿈 */
-            max-width: 75%; /* 메시지 최대 너비 */
+            word-wrap: break-word;
+            max-width: 75%;
         }
-
+        .user-message {
+            align-self: flex-end; /* 사용자 메시지는 우측 정렬 */
+            background-color: #d5f5d5;
+        }
+        .nicholas-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nicholas-message img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
         .chat-form {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 10px;
         }
-
         .chat-form input, .chat-form button {
             margin: 5px 0;
             padding: 10px;
@@ -61,74 +89,96 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
         .chat-form button {
             background-color: #ff6fa5;
             color: #fff;
             border: none;
             cursor: pointer;
         }
-
         .chat-form button:hover {
             background-color: #ff4f85;
         }
-
-        .font-welcome {
-            font-family: "Optima", sans-serif; /* 원하는 폰트로 변경 */
-            color: #f9abc7; /* 색상도 변경 가능 */
-            font-size: 27px;
-        }
-
-        .font-ziyou {
-            font-family: "GB18030 Bitmap", serif; /* 원하는 폰트로 변경 */
-            color: #f87eab; /* 색상도 변경 가능 */
-            font-size: 32px;
-        }
-
     </style>
 </head>
 <body>
-    <div class="welcome">
-        <span class="font-welcome">welcome</span><br>
-        <span class="font-ziyou">自由世界!</span>
+    <div class="guestbook">
+        <div class="welcome">
+            <span class="part1">welcome to</span> <br>
+            <span class="part2">自由世界!</span>
+        </div>
+        <div class="message-list" id="messageList">
+            <!-- 메시지가 여기에 추가됩니다 -->
+        </div>
+        <form id="chatForm" class="chat-form">
+            <input type="text" id="message" placeholder="메시지를 입력하세요" required>
+            <button type="submit">전송</button>
+        </form>
     </div>
-    <div class="message-list" id="messageList">
-        <!-- 메시지가 여기에 추가됩니다 -->
-    </div>
-    <form id="chatForm" class="chat-form">
-        <input type="text" id="message" placeholder="메시지를 입력하세요" required>
-        <button type="submit">전송</button>
-    </form>
     <script>
-        // JavaScript로 채팅 기능 추가
         const chatForm = document.getElementById('chatForm');
         const messageList = document.getElementById('messageList');
-
-        // 폼이 제출될 때 실행
-        chatForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // 기본 폼 동작(새로고침) 막기
+    
+        // 니콜라스의 답장 메시지 목록 (중국어와 한국어 번역 쌍으로 구성)
+        const nicholasReplies = [
+            ["谢谢你！真的很感动。", "고마워요! 정말 감동이에요."],
+            ["看到你的消息我真的很开心！", "당신의 메시지를 보니 정말 행복해요!"],
+            ["感谢你的生日祝福，我爱你！", "생일 축하해줘서 고마워요. 사랑해요!"],
+            ["记得我的生日，真的非常感谢！", "제 생일을 기억해줘서 정말 고마워요!"],
+            ["这是世界上最棒的祝福，谢谢你！", "세상에서 가장 멋진 축하 메시지에요. 고마워요!"]
+        ];
+    
+        // 사용자 메시지를 추가하는 함수
+        function addUserMessage(messageText) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'user-message');
+            messageElement.textContent = messageText;
+            messageList.appendChild(messageElement);
+        }
+    
+        // 니콜라스 메시지를 추가하는 함수
+        function addNicholasMessage() {
+            // 랜덤 답장 선택
+            const randomIndex = Math.floor(Math.random() * nicholasReplies.length);
+            const randomReply = nicholasReplies[randomIndex];
             
-            // 입력된 메시지 가져오기
+            const nicholasElement = document.createElement('div');
+            nicholasElement.classList.add('message', 'nicholas-message');
+    
+            // 프로필 이미지와 메시지 추가 (중국어와 한국어 번역을 한 박스에 추가)
+            nicholasElement.innerHTML = `
+                <img src="https://i.imgur.com/Cudzc0A.jpeg" alt="Nicholas">
+                <div>
+                    <span style="display: block; color: #333;">${randomReply[0]}</span>
+                    <span style="display: block; color: #666;">${randomReply[1]}</span>
+                </div>
+            `;
+            messageList.appendChild(nicholasElement);
+        }
+    
+        // 폼 제출 이벤트 핸들러
+        chatForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // 기본 동작 막기
+            
             const messageInput = document.getElementById('message');
             const messageText = messageInput.value.trim();
-
+    
             if (messageText !== '') {
-                // 메시지 요소 생성
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-                messageElement.textContent = messageText;
-
-                // 메시지 리스트에 추가
-                messageList.appendChild(messageElement);
-
+                // 사용자 메시지 추가
+                addUserMessage(messageText);
+    
+                // "생일 축하해" 메시지일 때만 답장
+                if (messageText === '생일 축하해') {
+                    setTimeout(addNicholasMessage, 1000); // 1초 후 답장 추가
+                }
+    
                 // 입력 필드 초기화
                 messageInput.value = '';
-                messageInput.focus(); // 다시 입력 필드로 포커스
-
+                messageInput.focus();
+    
                 // 스크롤을 아래로 자동 이동
                 messageList.scrollTop = messageList.scrollHeight;
             }
         });
     </script>
 </body>
-</html>
+</html>    
